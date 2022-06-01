@@ -1,0 +1,107 @@
+/*まずはお決まりのボックスサイズ算出をborer-boxに */
+*,
+*:before,
+*:after {
+  -webkit-box-sizing: inherit;
+  box-sizing: inherit;
+}
+
+html {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 62.5%; /*rem算出をしやすくするために*/
+}
+
+.btn,
+a.btn,
+button.btn {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.5;
+  position: relative;
+  display: inline-block;
+  padding: 1rem 4rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  color: #212529;
+  border-radius: 0.5rem;
+  width: 155px;
+  height: 45px;
+  margin: 10px;
+}
+
+body {
+  margin: 0;
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  font-size: small;
+  background-color: #fff1f9;
+}
+.wrapper {
+  background-color: #fff1f9;
+  width: 50%;
+  margin: auto;
+  text-align: center;
+}
+
+.baby {
+  width: 200px;
+}
+
+.title {
+  color: #faa2c1;
+  margin-top: 50px;
+}
+
+.btn--start,
+a.btn--start {
+  color: #fff;
+  background-color: #ff7bbb;
+}
+
+.btn--stop,
+a.btn--stop {
+  color: #fff;
+  background-color: #968cff;
+}
+
+.btn--start:hover,
+a.btn--start:hover {
+  color: #fff;
+  background: #ff87c1;
+}
+
+.btn--stop:hover,
+a.btn--stop:hover {
+  color: #fff;
+  background: #a39bff;
+}
+
+a.btn--radius {
+  border-radius: 100vh;
+}
+
+.output {
+}
+
+.example {
+  background-color: rgb(255, 247, 253);
+  width: 330px;
+  margin: auto;
+  font-size: small;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+  padding: 20px;
+  border-radius: 20px;
+}
