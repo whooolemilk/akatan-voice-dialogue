@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -100,16 +101,16 @@
 
         let newText = tts.text.replace(/\r?\n/g,'').replace(/\0/g,''); // 余計な文字の削除
         
-        Object.keys(response).forEach(key => { // 部分一致
+        Object.keys(response).forEach(key => {
           if(key.includes(newText) || newText.includes(key)){
-            if(key=="食べたい"){
+            if(key=="食べたい"){ // キーワードで返答を変える
               Object.keys(response.食べたい).forEach(key => {
                 console.log(key);
                 if(newText.includes(key)){
                   tts.text=response.食べたい[key];
                 }
               })
-            }else if(history.includes(key)){
+            }else if(history.includes(key)){ // 過去の応答に合わせて返答を変える
               let count=0;
               for (const value of history){
                 console.log(value);
@@ -123,15 +124,12 @@
               }else if(count>1){
                 tts.text="何回同じこと言うんだばぶばぶばぶ";
               }
-            }else{
-              tts.text=response[newText]
+            }else{ // 部分一致
+              tts.text=response[key]
             }
             speechSynthesis.speak(tts); 
             output += " => " + tts.text + '<br>';
-
-            //console.log("history:" + history.length);
             history[history.length]=newText;
-            //console.log(history);
             
           }
         });
