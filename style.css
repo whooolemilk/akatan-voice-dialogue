@@ -89,9 +89,6 @@ a.btn--radius {
   border-radius: 100vh;
 }
 
-.output {
-}
-
 .example {
   background-color: rgb(255, 247, 253);
   width: 330px;
@@ -104,4 +101,8 @@ ul {
   padding-left: 0;
   padding: 20px;
   border-radius: 20px;
+}
+
+.bold {
+  font-weight: 700;
 }
