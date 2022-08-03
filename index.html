@@ -10,7 +10,6 @@
     <title>Akatan Spoken Dialog by Javascript</title>
   </head>
   <body>
-    <script type="text/javascript" src="apikey.js"></script>
     <div class="wrapper">
       <h1 class="logo"><img src="./logo.png" alt="baby" class="logo" /></h1>
       <img src="./baby.png" alt="baby" class="baby" />
@@ -36,9 +35,8 @@
     </div>
 
     <script>
-      const YAHOO_API_KEY = config.apikey;
       const URL = "https://jlp.yahooapis.jp/NLUService/V1/analyze?appid="; // APIのリクエストURL
-      const APIID = YAHOO_API_KEY; // あなたのアプリケーションID
+      const APIID = "dj00aiZpPTFCZHZCeWZDYjF3MyZzPWNvbnN1bWVyc2VjcmV0Jng9ODU-"; // あなたのアプリケーションID
 
       // 応答の定義（ハッシュ）
       var response = {
