@@ -10,6 +10,11 @@ html {
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
   font-size: 62.5%; /*rem算出をしやすくするために*/
+  height: 100%;
+}
+
+h1 {
+  margin: auto;
 }
 
 .btn,
@@ -43,46 +48,58 @@ body {
   margin: 0;
   font-family: "M PLUS Rounded 1c", sans-serif;
   font-size: small;
-  background-color: #fff1f9;
+  background-color: #aef853;
+  background-size: 20%;
+  background-image: url("./baby.png");
+  height: 100%;
 }
 .wrapper {
-  background-color: #fff1f9;
-  width: 50%;
-  margin: auto;
+  /* background-color: #aef853; */
+  background-color: #fff;
+  width: 400px;
+  /* height: 100vh; */
+  /* height: 100%; */
+  min-height:100vh;
+  margin: 0 auto;
   text-align: center;
+  padding: 32px 16px;
 }
 
 .baby {
   width: 200px;
 }
 
+.logo {
+  width: 300px;
+}
+
 .title {
-  color: #faa2c1;
-  margin-top: 50px;
+  color: #2d082c;
+  /* margin-top: 50px; */
 }
 
 .btn--start,
 a.btn--start {
   color: #fff;
-  background-color: #ff7bbb;
+  background-color: #ff3f9f;
 }
 
 .btn--stop,
 a.btn--stop {
   color: #fff;
-  background-color: #968cff;
+  background-color: #ab4bf2;
 }
 
 .btn--start:hover,
 a.btn--start:hover {
   color: #fff;
-  background: #ff87c1;
+  background: #ff3f9f;
 }
 
 .btn--stop:hover,
 a.btn--stop:hover {
   color: #fff;
-  background: #a39bff;
+  background: #ab4bf2;
 }
 
 a.btn--radius {
@@ -94,12 +111,14 @@ a.btn--radius {
   width: 330px;
   margin: auto;
   font-size: small;
+  /* height: 100%; */
 }
 
 ul {
   list-style: none;
   padding-left: 0;
   padding: 20px;
+  height: auto;
   border-radius: 20px;
 }
 

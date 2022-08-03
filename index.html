@@ -10,17 +10,18 @@
     <title>Akatan Spoken Dialog by Javascript</title>
   </head>
   <body>
+    <script type="text/javascript" src="apikey.js"></script>
     <div class="wrapper">
-      <h1 class="title">あかたんとはなそう!<br />(機能拡張版)</h1>
-      <img src="./yumekawa_baby.png" alt="baby" class="baby" />
+      <h1 class="logo"><img src="./logo.png" alt="baby" class="logo" /></h1>
+      <img src="./baby.png" alt="baby" class="baby" />
       <div class="btn-container">
         <a id="startButton" class="btn btn--start btn--radius">すたーと</a>
         <a id="stopButton" class="btn btn--stop btn--radius">すとっぷ</a>
       </div>
 
       <ul class="example">
-        <li>こんにちは</li>
-        <li>名前はなんていうの？</li>
+        <!-- <li>こんにちは</li>
+        <l誰が作ったのていうの？</li> -->
         <li>何歳なの？</li>
         <li>元気ですか</li>
         <li>今日は何が食べたいの</li>
@@ -35,12 +36,22 @@
     </div>
 
     <script>
+      const YAHOO_API_KEY = config.apikey;
+      const URL = "https://jlp.yahooapis.jp/NLUService/V1/analyze?appid="; // APIのリクエストURL
+      const APIID = YAHOO_API_KEY; // あなたのアプリケーションID
+
       // 応答の定義（ハッシュ）
       var response = {
         こんにちは: "ばぶう",
-        "名前,何": "あかたんです",
+        "名前,何": "ファンキーなあかたんです",
+        使い方:
+          "この対話システムは、俺、ファンキーなあかたんとほぼ無限に会話できるシステムだぜばぶ。１番のメイン機能は、「何々してもいいかな」と聞くと、俺がファンキーなgif画像と一緒に物事の判断をしてやるぜ。",
+        "誰,作った": [
+          "この人だぜ",
+          "https://github.com/whooolemilk/akatan-voice-dialogue",
+        ],
         何歳: "０才だお",
-        元気: "元気だよばぶばぶ",
+        元気: "まあまあ元気だよばぶばぶ",
         "今日,食べたい": "みるくのみたいでちゅ",
         "明日,食べたい": "むーん、あまいものたべたいでちゅ",
         "明後日,食べたい": "そんなに考えれないので聞かないでほちいでちゅ",
@@ -71,12 +82,11 @@
       asr.continuous = true; // 継続入力をオン
 
       let output = ""; // 出力
-
       // 認識結果が出力されたときのイベントハンドラ
       asr.onresult = function (event) {
         let transcript = event.results[event.resultIndex][0].transcript; // 結果文字列
-        let output_not_final = "";
 
+        let output_not_final = "";
         if (event.results[event.resultIndex].isFinal) {
           // 結果が確定（Final）のとき
           asr.abort(); // 音声認識を停止
@@ -89,21 +99,67 @@
 
           keys.forEach(function (key) {
             let flag = true;
-            console.log(transcript);
+            // console.log(transcript);
             key.split(",").forEach(function (word) {
               let pattern = new RegExp(word);
               let flag_test = pattern.test(transcript); // マッチしたらtrue, しなかったらfalse
               flag = flag && flag_test; // 両方trueならtrue
-              console.log(pattern + "+" + ":" + flag_test);
+              // console.log(pattern + "+" + ":" + flag_test);
             });
             if (flag) {
               ret = response[key];
-              console.log(key + " : " + ret);
+              // console.log(key + " : " + ret);
             }
           });
 
+          // console.log("ret=" + ret);
+
           if (typeof ret == "undefined") {
-            answer = "ごめんなさい。わかりません。";
+            // answer = "ごめんなさい。わかりません。";
+
+            let queryURL = URL + APIID + "&intext=" + transcript;
+            // console.log(queryURL);
+
+            // HTTPリクエストの準備
+            const request = new XMLHttpRequest();
+            request.open("GET", queryURL, true);
+            request.responseType = "json"; // レスポンスはJSON形式に変換
+
+            // HTTPの状態が変化したときのイベントハンドラ
+            request.onreadystatechange = function () {
+              if (this.readyState == 4 && this.status == 200) {
+                // readyState == 4 操作完了
+                // status == 200 リクエスト成功（HTTPレスポンス）
+
+                let res = this.response; // 結果はJSON形式
+
+                Object.keys(res.result).forEach(function (key) {
+                  // console.log(key + ": " + res.result[key]);
+                });
+
+                // console.log(res.result.method == "SAY");
+
+                // method が SAY のときのみ
+                if (res.result.method == "SAY") {
+                  var answer =
+                    res.result.param_text_tts || res.result.param_text;
+                  tts.text = answer + "ばぶぅ";
+
+                  // 再生が終了（end）ときのイベントハンドラ（終了したときに実行される）
+                  tts.onend = function (event) {
+                    asr.start(); // 音声認識を再開
+                  };
+
+                  output += transcript + " => " + answer + "ばぶぅ" + "<br>";
+                  resultOutput.innerHTML = output;
+                  speechSynthesis.speak(tts); // 再生
+                } else {
+                  asr.start(); // 音声認識を再開
+                }
+              }
+            };
+            // HTTPリクエストの実行
+            request.send();
           } else if (Array.isArray(ret)) {
             answer = ret[0];
             webpage = ret[1];
@@ -111,19 +167,23 @@
             answer = ret;
           }
 
-          output += transcript + " => " + answer + "<br>";
-          tts.text = answer;
-
           // 再生が終了（end）ときのイベントハンドラ（終了したときに実行される）
           tts.onend = function (event) {
             if (typeof webpage != "undefined") {
               // location.href = webpage; // ページを移動
               window.open(webpage, "_blank");
             }
-            asr.start(); // 音声認識を再開
+            if (tts.text != "undefined") {
+              asr.start(); // 音声認識を再開
+            }
           };
 
-          speechSynthesis.speak(tts); // 再生
+          if (answer != undefined) {
+            output += transcript + " => " + answer + "<br>";
+            tts.text = answer;
+
+            speechSynthesis.speak(tts); // 再生
+          }
         } else {
           // 結果がまだ未確定のとき
           output_not_final =
@@ -143,5 +203,8 @@
         asr.stop();
       });
     </script>
+
+    <!-- Yahoo!JAPANのAPIを利用したときはクレジット表記が必要 -->
+    <p>Web Services by Yahoo! JAPAN （https://developer.yahoo.co.jp/about）</p>
   </body>
 </html>
